@@ -29,9 +29,18 @@ const getAllBlogs = async () => {
     return allBlogs
 }
 
+const deleteBlog = async (blogId: number) => {
+    const result = await prisma.blog.delete({
+        where: {
+            id: blogId
+        }
+    })
+    return result
+}
 
 export const BlogServices = {
     createBlog,
     getAllBlogs,
-    updateBlog
+    updateBlog,
+    deleteBlog
 }

@@ -5,7 +5,6 @@ import { NextFunction, Request, Response } from "express";
 import { BlogServices } from "./blog.service";
 
 
-
 const createBlog = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
 
@@ -50,8 +49,24 @@ const getAllBlogs = catchAsync(
     }
 )
 
+const deleteBlog = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+
+        const blogId = Number(req.params.id)
+
+        const result = await BlogServices.deleteBlog(blogId);
+        sendResponse(res, {
+            success: true,
+            statusCode: httpStatus.OK,
+            message: "Blog Deleted Successfully",
+            data: result,
+        });
+    }
+)
+
 export const BlogControllers = {
     createBlog,
     getAllBlogs,
-    updateBlog
+    updateBlog,
+    deleteBlog
 }
