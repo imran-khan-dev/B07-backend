@@ -21,7 +21,37 @@ const createBlog = catchAsync(
     }
 )
 
+const updateBlog = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+
+        const payload = req.body
+        const blogId = Number(req.params.id)
+
+        const result = await BlogServices.updateBlog(blogId, payload);
+        sendResponse(res, {
+            success: true,
+            statusCode: httpStatus.OK,
+            message: "Blog Updated Successfully",
+            data: result,
+        });
+    }
+)
+
+const getAllBlogs = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+
+        const result = await BlogServices.getAllBlogs();
+        sendResponse(res, {
+            success: true,
+            statusCode: httpStatus.OK,
+            message: "All Blogs Retrived Successfully",
+            data: result,
+        });
+    }
+)
 
 export const BlogControllers = {
-    createBlog
+    createBlog,
+    getAllBlogs,
+    updateBlog
 }

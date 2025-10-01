@@ -10,7 +10,28 @@ const createBlog = async (payload: Prisma.BlogCreateInput): Promise<Blog> => {
     return newBlog
 }
 
+const updateBlog = async (blogId: number, payload: Partial<Prisma.BlogCreateInput>): Promise<Blog> => {
+    const result = await prisma.blog.update({
+        where: {
+            id: blogId
+        },
+        data: payload
+    })
+
+
+    return result
+}
+
+const getAllBlogs = async () => {
+    const allBlogs = prisma.blog.findMany()
+
+
+    return allBlogs
+}
+
 
 export const BlogServices = {
-    createBlog
+    createBlog,
+    getAllBlogs,
+    updateBlog
 }
