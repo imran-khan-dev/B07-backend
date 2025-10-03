@@ -28,6 +28,10 @@ passport.use(
                     isUserExist.passwordHash as string
                 );
 
+                console.log("password test1:", isUserExist.passwordHash)
+                console.log("password test2:", password)
+                console.log("password test3:", isPasswordMatched)
+
                 if (!isPasswordMatched) {
                     return done(null, false, { message: "Password does not match" });
                 }

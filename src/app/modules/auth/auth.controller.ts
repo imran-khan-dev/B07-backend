@@ -22,7 +22,7 @@ const credentialsLogin = catchAsync(
 
       const userTokens = await createUserTokens(user);
 
-      const { password: pass, ...rest } = user.toObject();
+      const { password: pass, ...rest } = user;
 
       setAuthCookie(res, userTokens);
 
@@ -42,7 +42,6 @@ const credentialsLogin = catchAsync(
 
 const logout = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const userRole = (req as any).user?.role;
 
     res.clearCookie("accessToken", {
       httpOnly: true,

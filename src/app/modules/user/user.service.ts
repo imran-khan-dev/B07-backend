@@ -1,13 +1,42 @@
+import bcryptjs from 'bcryptjs';
 import httpStatus from 'http-status-codes';
 import { Prisma, User } from "@prisma/client";
 import { prisma } from "../../../db";
 import AppError from "../../errorHelpers/AppError";
+import { envVars } from '../../config/env';
 
 const createUser = async (payload: Prisma.UserCreateInput): Promise<User> => {
-  const createdUser = await prisma.user.create({
-    data: payload,
+
+
+
+  const { email, passwordHash, ...rest } = payload;
+
+  const isUserExist = await prisma.user.findUnique({
+    where: {
+      email: email
+    }
   });
-  console.log("create user!!");
+
+  if (isUserExist) {
+    throw new AppError(httpStatus.BAD_REQUEST, "User Already Exist");
+  }
+
+  const hashedPassword = await bcryptjs.hash(
+    passwordHash as string,
+    Number(envVars.BCRYPT_SALT_ROUND)
+  );
+
+  const createdUser = await prisma.user.create(
+    {
+      data: {
+        email: email,
+        passwordHash: hashedPassword,
+        ...rest
+      }
+    }
+  );
+
+
   return createdUser;
 };
 
