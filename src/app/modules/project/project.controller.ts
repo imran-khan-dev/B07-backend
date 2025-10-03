@@ -23,17 +23,47 @@ const updateProject = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
 
         const payload = req.body
+        const projectId = Number(req.params.id)
 
-        const result = await ProjectServices.updateProject(payload);
+        const result = await ProjectServices.updateProject(projectId, payload);
         sendResponse(res, {
             success: true,
             statusCode: httpStatus.OK,
-            message: "Project Created Successfully",
+            message: "Project Updated Successfully",
+            data: result,
+        });
+    }
+)
+
+const getAllProjects = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+
+        const result = await ProjectServices.getAllProjects();
+        sendResponse(res, {
+            success: true,
+            statusCode: httpStatus.OK,
+            message: "Projects Retreived Successfully",
+            data: result,
+        });
+    }
+)
+
+const deleteProject = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+
+        const result = await ProjectServices.deleteProject(Number(req.params.id));
+        sendResponse(res, {
+            success: true,
+            statusCode: httpStatus.OK,
+            message: "Project Deleted Successfully",
             data: result,
         });
     }
 )
 
 export const ProjectController = {
-    createProject
+    createProject,
+    updateProject,
+    getAllProjects,
+    deleteProject,
 }

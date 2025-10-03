@@ -20,7 +20,7 @@ const updateProject = async (projectId: number, payload: Partial<Prisma.ProjectC
     return result
 }
 
-const getAllProject = async () => {
+const getAllProjects = async () => {
     const result = await prisma.project.findMany()
     return result
 }
@@ -38,6 +38,6 @@ const deleteProject = async (projectId: number) => {
 export const ProjectServices = {
     createProject,
     updateProject,
-    getAllProject,
+    getAllProjects,
     deleteProject
 }
