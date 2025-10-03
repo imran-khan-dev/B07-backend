@@ -3,13 +3,13 @@ import { Prisma, User } from "@prisma/client";
 import { prisma } from "../../../db";
 import AppError from "../../errorHelpers/AppError";
 
-// const createUser = async (payload: Prisma.UserCreateInput): Promise<User> => {
-//   const createdUser = await prisma.user.create({
-//     data: payload,
-//   });
-//   console.log("create user!!");
-//   return createdUser;
-// };
+const createUser = async (payload: Prisma.UserCreateInput): Promise<User> => {
+  const createdUser = await prisma.user.create({
+    data: payload,
+  });
+  console.log("create user!!");
+  return createdUser;
+};
 
 // const getAllUsers = async () => {
 //   const result = await prisma.user.findMany(
@@ -114,7 +114,7 @@ const getUserById = async (userId: number) => {
 // }
 
 export const UserServices = {
-  // createUser,
+  createUser,
   // getAllUsers,
   getUserById,
   // updateUserById,

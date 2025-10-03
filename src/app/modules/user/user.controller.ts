@@ -5,17 +5,17 @@ import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 
 
-// const createUser = catchAsync(
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     const result = await UserServices.createUser(req.body);
-//     sendResponse(res, {
-//       success: true,
-//       statusCode: httpStatus.CREATED,
-//       message: "User Created Successfully",
-//       data: result,
-//     });
-//   }
-// );
+const createUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = await UserServices.createUser(req.body);
+    sendResponse(res, {
+      success: true,
+      statusCode: httpStatus.CREATED,
+      message: "User Created Successfully",
+      data: result,
+    });
+  }
+);
 
 // const getAllUsers = catchAsync(
 //   async (req: Request, res: Response, next: NextFunction) => {
@@ -76,7 +76,7 @@ const getUserById = catchAsync(
 // )
 
 export const UserController = {
-  // createUser,
+  createUser,
   // getAllUsers,
   getUserById,
   // updateUserById,

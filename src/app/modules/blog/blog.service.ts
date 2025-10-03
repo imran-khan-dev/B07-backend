@@ -23,7 +23,11 @@ const updateBlog = async (blogId: number, payload: Partial<Prisma.BlogCreateInpu
 }
 
 const getAllBlogs = async () => {
-    const allBlogs = prisma.blog.findMany()
+    const allBlogs = prisma.blog.findMany({
+        orderBy: {
+            createdAt: "desc",
+        },
+    })
 
 
     return allBlogs

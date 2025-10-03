@@ -2,6 +2,8 @@ import { Project, Prisma } from "@prisma/client";
 import { prisma } from "../../../db";
 
 const createProject = async (payload: Prisma.ProjectCreateInput): Promise<Project> => {
+    console.log("Payload in createProject:", payload);
+
     const result = await prisma.project.create({
         data: payload
     })
@@ -21,7 +23,11 @@ const updateProject = async (projectId: number, payload: Partial<Prisma.ProjectC
 }
 
 const getAllProjects = async () => {
-    const result = await prisma.project.findMany()
+    const result = await prisma.project.findMany({
+        orderBy: {
+      createdAt: "desc",
+    },
+    })
     return result
 }
 
