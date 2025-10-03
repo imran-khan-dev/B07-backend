@@ -17,21 +17,36 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  blogs Blog[]
+  blogs   Blog[]
+  Project Project[]
 }
 
 model Blog {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String
-  thumbnail String?
+  id         Int      @id @default(autoincrement())
+  title      String
+  content    String
+  thumbnail  String?
   isFeatured Boolean?
-  tags      String[]
-  views     Int      @default(0)
-  authorId  Int
-  author    User     @relation(fields: [authorId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  tags       String[]
+  views      Int      @default(0)
+  authorId   Int
+  author     User     @relation(fields: [authorId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  thumbnail   String?
+  liveUrl     String?
+  repoUrl     String?
+  features    String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  ownerId     Int
+  owner       User     @relation(fields: [ownerId], references: [id])
 }
 
 enum Role {
