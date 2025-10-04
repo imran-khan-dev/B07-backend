@@ -49,6 +49,19 @@ const getAllBlogs = catchAsync(
     }
 )
 
+const getBlogStats = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+
+        const stats = await BlogServices.getBlogStats();
+        sendResponse(res, {
+            success: true,
+            statusCode: httpStatus.OK,
+            message: "Blog Stats Retrived Successfully",
+            data: stats,
+        });
+    }
+)
+
 const deleteBlog = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
 
@@ -67,6 +80,7 @@ const deleteBlog = catchAsync(
 export const BlogControllers = {
     createBlog,
     getAllBlogs,
+    getBlogStats,
     updateBlog,
     deleteBlog
 }

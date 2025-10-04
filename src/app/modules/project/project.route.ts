@@ -8,6 +8,7 @@ const router = Router()
 router.post("/create", checkAuth("ADMIN"), multerUpload.single("file"), ProjectController.createProject)
 router.patch("/:id", checkAuth("ADMIN"), multerUpload.single("file"), ProjectController.updateProject)
 router.get("/all-projects", checkAuth("ADMIN"), ProjectController.getAllProjects)
+router.get("/get-project-stats", checkAuth("ADMIN"), ProjectController.getProjectStats)
 router.delete("/:id", checkAuth("ADMIN"), ProjectController.deleteProject)
 
 

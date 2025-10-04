@@ -48,6 +48,19 @@ const getAllProjects = catchAsync(
     }
 )
 
+const getProjectStats = catchAsync(
+    async (req: Request, res: Response, next: NextFunction) => {
+
+        const result = await ProjectServices.getProjectStats();
+        sendResponse(res, {
+            success: true,
+            statusCode: httpStatus.OK,
+            message: "Project Stats Retreived Successfully",
+            data: result,
+        });
+    }
+)
+
 const deleteProject = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
 
@@ -65,5 +78,6 @@ export const ProjectController = {
     createProject,
     updateProject,
     getAllProjects,
+    getProjectStats,
     deleteProject,
 }

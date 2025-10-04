@@ -25,10 +25,31 @@ const updateProject = async (projectId: number, payload: Partial<Prisma.ProjectC
 const getAllProjects = async () => {
     const result = await prisma.project.findMany({
         orderBy: {
-      createdAt: "desc",
-    },
+            createdAt: "desc",
+        },
     })
     return result
+}
+
+const getProjectStats = async () => {
+
+    return await prisma.$transaction(async (tx) => {
+        const aggregates = await tx.project.aggregate({
+            _count: true,
+            _sum: { views: true },
+            _avg: { views: true },
+            _max: { views: true },
+            _min: { views: true }
+        })
+
+        return {
+            totalProject: aggregates._count ?? 0,
+            totalViews: aggregates._sum.views ?? 0,
+            avgViews: aggregates._avg.views ?? 0,
+            minViews: aggregates._min.views ?? 0,
+            maxViews: aggregates._max.views ?? 0,
+        }
+    })
 }
 
 const deleteProject = async (projectId: number) => {
@@ -45,5 +66,6 @@ export const ProjectServices = {
     createProject,
     updateProject,
     getAllProjects,
+    getProjectStats,
     deleteProject
 }
