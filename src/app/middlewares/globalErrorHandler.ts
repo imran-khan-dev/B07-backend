@@ -24,7 +24,7 @@ export const globalErrorHandler = (
   let message = "Something Went Wrong!!";
 
   //Duplicate error
-  if (err.code === 11000) {
+  if (err.code === "P2002") {
     const simplifiedError = handlerDuplicateError(err);
     statusCode = simplifiedError.statusCode;
     message = simplifiedError.message;
@@ -41,7 +41,7 @@ export const globalErrorHandler = (
     errorSources = simplifiedError.errorSources as TErrorSources[];
   }
   //Mongoose Validation Error
-  else if (err.name === "ValidationError") {
+  else if (err.name === "PrismaClientValidationError") {
     const simplifiedError = handlerValidationError(err);
     statusCode = simplifiedError.statusCode;
     errorSources = simplifiedError.errorSources as TErrorSources[];

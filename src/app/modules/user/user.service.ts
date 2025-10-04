@@ -17,9 +17,9 @@ const createUser = async (payload: Prisma.UserCreateInput): Promise<User> => {
     }
   });
 
-  if (isUserExist) {
-    throw new AppError(httpStatus.BAD_REQUEST, "User Already Exist");
-  }
+  // if (isUserExist) {
+  //   throw new AppError(httpStatus.BAD_REQUEST, "User Already Exist");
+  // }
 
   const hashedPassword = await bcryptjs.hash(
     passwordHash as string,

@@ -4,7 +4,7 @@ import { checkAuth } from "../../middlewares/checkAuth";
 
 const router = Router();
 
-// router.post("/create", UserController.createUser);
+router.post("/create", UserController.createUser);
 // router.get("/all-users", UserController.getAllUsers);
 router.get("/:id", checkAuth("ADMIN"), UserController.getUserById);
 // router.patch("/:id", UserController.updateUserById);
