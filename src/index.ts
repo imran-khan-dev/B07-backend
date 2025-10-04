@@ -4,7 +4,7 @@ import { Server } from "http";
 import app from "./app";
 import { envVars } from "./app/config/env";
 
-// import { seedAdmin } from "./app/utils/seedAdmin";
+import { seedAdmin } from "./app/utils/seedAdmin";
 
 let server: Server;
 
@@ -32,7 +32,7 @@ const startServer = async () => {
 
 (async () => {
   await startServer();
-  // await seedAdmin();
+  await seedAdmin();
 })();
 
 // Server error handling
