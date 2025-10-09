@@ -22,16 +22,59 @@ const updateBlog = async (blogId: number, payload: Partial<Prisma.BlogCreateInpu
     return result
 }
 
-const getAllBlogs = async () => {
-    const allBlogs = prisma.blog.findMany({
-        orderBy: {
-            createdAt: "desc",
+const getAllBlogs = async ({
+    page = 1,
+    limit = 10,
+    search,
+    isFeatured,
+    tags
+}: {
+    page?: number,
+    limit?: number,
+    search?: string,
+    isFeatured?: boolean,
+    tags?: string[]
+}) => {
+    const skip = (page - 1) * limit;
+
+    const where: any = {
+        AND: [
+            search && {
+                OR: [
+                    { title: { contains: search, mode: 'insensitive' } },
+                    { content: { contains: search, mode: 'insensitive' } }
+                ]
+
+            },
+            typeof isFeatured === "boolean" && { isFeatured },
+            (tags && tags.length > 0) && { tags: { hasEvery: tags } }
+        ].filter(Boolean)
+    }
+
+    const result = await prisma.blog.findMany({
+        skip,
+        take: limit,
+        where,
+        include: {
+            author: true
         },
-    })
+        orderBy: {
+            createdAt: "desc"
+        }
+    });
 
+    const total = await prisma.blog.count({ where })
 
-    return allBlogs
-}
+    return {
+        data: result,
+        pagination: {
+            page,
+            limit,
+            total,
+            totalPages: Math.ceil(total / limit)
+        }
+    };
+};
 
 const getBlogStats = async () => {
 
@@ -45,11 +88,11 @@ const getBlogStats = async () => {
         })
 
         return {
-             totalBlogs: aggregates._count ?? 0,
-                totalViews: aggregates._sum.views ?? 0,
-                avgViews: aggregates._avg.views ?? 0,
-                minViews: aggregates._min.views ?? 0,
-                maxViews: aggregates._max.views ?? 0,
+            totalBlogs: aggregates._count ?? 0,
+            totalViews: aggregates._sum.views ?? 0,
+            avgViews: aggregates._avg.views ?? 0,
+            minViews: aggregates._min.views ?? 0,
+            maxViews: aggregates._max.views ?? 0,
         }
     })
 }

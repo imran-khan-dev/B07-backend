@@ -39,7 +39,13 @@ const updateBlog = catchAsync(
 const getAllBlogs = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
 
-        const result = await BlogServices.getAllBlogs();
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 10;
+        const search = (req.query.search as string) || "";
+        const isFeatured = req.query.isFeatured ? req.query.isFeatured === "true" : undefined
+        const tags = req.query.tags ? (req.query.tags as string).split(",") : []
+        const result = await BlogServices.getAllBlogs({ page, limit, search, isFeatured, tags });
+
         sendResponse(res, {
             success: true,
             statusCode: httpStatus.OK,
