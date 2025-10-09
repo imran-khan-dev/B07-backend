@@ -8,6 +8,7 @@ const router = Router()
 router.post("/create-blog", checkAuth("ADMIN"), multerUpload.single("file"), BlogControllers.createBlog)
 router.get("/get-blogs", BlogControllers.getAllBlogs)
 router.get("/get-blog-stats", checkAuth("ADMIN"), BlogControllers.getBlogStats)
+router.get("/:id", BlogControllers.getBlogById)
 router.patch("/:id", checkAuth("ADMIN"), multerUpload.single("file"), BlogControllers.updateBlog)
 router.delete("/:id", checkAuth("ADMIN"), BlogControllers.deleteBlog)
 

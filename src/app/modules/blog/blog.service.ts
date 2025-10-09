@@ -1,3 +1,5 @@
+import httpStatus from 'http-status-codes';
+import AppError from '../../errorHelpers/AppError';
 import { prisma } from './../../../db';
 import { Blog, Prisma } from '@prisma/client';
 
@@ -11,6 +13,18 @@ const createBlog = async (payload: Prisma.BlogCreateInput): Promise<Blog> => {
 }
 
 const updateBlog = async (blogId: number, payload: Partial<Prisma.BlogCreateInput>): Promise<Blog> => {
+
+    const blog = await prisma.blog.findUnique({
+        where: {
+            id: blogId
+        },
+    })
+
+    if (!blog) {
+        throw new AppError(httpStatus.BAD_REQUEST, "Blog not found!");
+    }
+
+
     const result = await prisma.blog.update({
         where: {
             id: blogId
@@ -18,6 +32,20 @@ const updateBlog = async (blogId: number, payload: Partial<Prisma.BlogCreateInpu
         data: payload
     })
 
+
+    return result
+}
+
+const getBlogById = async (blogId: number): Promise<Blog> => {
+    const result = await prisma.blog.findUnique({
+        where: {
+            id: blogId
+        },
+    })
+
+    if (!result) {
+        throw new AppError(httpStatus.BAD_REQUEST, "Blog not found!");
+    }
 
     return result
 }
@@ -98,6 +126,18 @@ const getBlogStats = async () => {
 }
 
 const deleteBlog = async (blogId: number) => {
+
+    const blog = await prisma.blog.findUnique({
+        where: {
+            id: blogId
+        },
+    })
+
+    if (!blog) {
+        throw new AppError(httpStatus.BAD_REQUEST, "Blog not found!");
+    }
+
+
     const result = await prisma.blog.delete({
         where: {
             id: blogId
@@ -108,6 +148,7 @@ const deleteBlog = async (blogId: number) => {
 
 export const BlogServices = {
     createBlog,
+    getBlogById,
     getAllBlogs,
     getBlogStats,
     updateBlog,
