@@ -41,6 +41,9 @@ const getBlogById = async (blogId: number): Promise<Blog> => {
         where: {
             id: blogId
         },
+        include: {
+            author: true
+        },
     })
 
     if (!result) {
