@@ -6,7 +6,6 @@ import AppError from "../errorHelpers/AppError";
 import { handleCastError } from "../helpers/handleCastError";
 import { handlerDuplicateError } from "../helpers/handleDuplicateError";
 import { handlerValidationError } from "../helpers/handlerValidationError";
-import { handlerZodError } from "../helpers/handlerZodError";
 import { TErrorSources } from "../interface/error.types";
 
 export const globalErrorHandler = (
@@ -34,12 +33,8 @@ export const globalErrorHandler = (
     const simplifiedError = handleCastError(err);
     statusCode = simplifiedError.statusCode;
     message = simplifiedError.message;
-  } else if (err.name === "ZodError") {
-    const simplifiedError = handlerZodError(err);
-    statusCode = simplifiedError.statusCode;
-    message = simplifiedError.message;
-    errorSources = simplifiedError.errorSources as TErrorSources[];
-  }
+  } 
+
   //Mongoose Validation Error
   else if (err.name === "PrismaClientValidationError") {
     const simplifiedError = handlerValidationError(err);
