@@ -7,7 +7,12 @@ import { ProjectServices } from './project.service';
 const createProject = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
 
-        const payload = req.body
+        const payload = {
+            ...req.body,
+            features: req.body.features ? JSON.parse(req.body.features) : undefined,
+            ownerId: Number(req.body.ownerId),
+            thumbnail: req.file?.path
+        };
 
         const result = await ProjectServices.createProject(payload);
         sendResponse(res, {
@@ -22,7 +27,12 @@ const createProject = catchAsync(
 const updateProject = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
 
-        const payload = req.body
+        const payload = {
+            ...req.body,
+            features: req.body.features ? JSON.parse(req.body.features) : undefined,
+            thumbnail: req.file?.path
+        };
+
         const projectId = Number(req.params.id)
 
         const result = await ProjectServices.updateProject(projectId, payload);
