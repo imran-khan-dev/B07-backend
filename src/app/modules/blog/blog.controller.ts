@@ -3,12 +3,19 @@ import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import { NextFunction, Request, Response } from "express";
 import { BlogServices } from "./blog.service";
+import { features } from 'process';
 
 
 const createBlog = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
 
-        const payload = req.body
+        const payload = {
+            ...req.body,
+            tags: req.body.tags ? JSON.parse(req.body.tags) : undefined,
+            isFeatured: req.body.isFeatured ? JSON.parse(req.body.isFeatured) : undefined,
+            authorId: Number(req.body.authorId),
+            thumbnail: req.file?.path
+        };
 
         const result = await BlogServices.createBlog(payload);
         sendResponse(res, {
@@ -23,7 +30,13 @@ const createBlog = catchAsync(
 const updateBlog = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
 
-        const payload = req.body
+        const payload = {
+            ...req.body,
+            tags: req.body.tags ? JSON.parse(req.body.tags) : undefined,
+            isFeatured: req.body.isFeatured ? JSON.parse(req.body.isFeatured) : undefined,
+            thumbnail: req.file?.path
+        };
+
         const blogId = Number(req.params.id)
 
         const result = await BlogServices.updateBlog(blogId, payload);
