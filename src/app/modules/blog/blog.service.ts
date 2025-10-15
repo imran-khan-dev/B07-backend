@@ -37,7 +37,7 @@ const updateBlog = async (blogId: number, payload: Partial<Prisma.BlogCreateInpu
 }
 
 const getBlogById = async (blogId: number): Promise<Blog> => {
-    const result = await prisma.blog.findUnique({
+    const blog = await prisma.blog.findUnique({
         where: {
             id: blogId
         },
@@ -46,11 +46,17 @@ const getBlogById = async (blogId: number): Promise<Blog> => {
         },
     })
 
-    if (!result) {
+    if (!blog) {
         throw new AppError(httpStatus.BAD_REQUEST, "Blog not found!");
     }
 
-    return result
+    await prisma.blog.update({
+        where: { id: blogId },
+        data: { views: { increment: 1 } },
+    });
+
+
+    return { ...blog, views: blog.views + 1 };
 }
 
 const getAllBlogs = async ({

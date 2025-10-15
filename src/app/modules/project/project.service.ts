@@ -22,32 +22,69 @@ const updateProject = async (projectId: number, payload: Partial<Prisma.ProjectC
     return result
 }
 
-const getAllProjects = async () => {
+const getAllProjects = async ({
+    page = 1,
+    limit = 10,
+    search,
+    features,
+}: {
+    page?: number;
+    limit?: number;
+    search?: string;
+    features?: string[];
+}) => {
+    const skip = (page - 1) * limit;
+
+
+    const where: any = {
+        AND: [
+            search && {
+                OR: [
+                    { title: { contains: search, mode: "insensitive" } },
+                    { description: { contains: search, mode: "insensitive" } },
+                ],
+            },
+            features && features.length > 0 && { features: { hasEvery: features } },
+        ].filter(Boolean),
+    };
+
+
     const result = await prisma.project.findMany({
+        skip,
+        take: limit,
+        where,
+        include: {
+            owner: true,
+        },
         orderBy: {
             createdAt: "desc",
         },
-    })
-    return result
-}
+    });
+
+
+    const total = await prisma.project.count({ where });
+
+    return {
+        data: result,
+        pagination: {
+            page,
+            limit,
+            total,
+            totalPages: Math.ceil(total / limit),
+        },
+    };
+};
+
 
 const getProjectStats = async () => {
 
     return await prisma.$transaction(async (tx) => {
         const aggregates = await tx.project.aggregate({
-            _count: true,
-            _sum: { views: true },
-            _avg: { views: true },
-            _max: { views: true },
-            _min: { views: true }
+            _count: true
         })
 
         return {
-            totalProject: aggregates._count ?? 0,
-            totalViews: aggregates._sum.views ?? 0,
-            avgViews: aggregates._avg.views ?? 0,
-            minViews: aggregates._min.views ?? 0,
-            maxViews: aggregates._max.views ?? 0,
+            totalProject: aggregates._count ?? 0
         }
     })
 }

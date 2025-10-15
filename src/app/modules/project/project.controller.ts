@@ -1,3 +1,4 @@
+import { features } from 'process';
 import httpStatus from 'http-status-codes';
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
@@ -48,7 +49,12 @@ const updateProject = catchAsync(
 const getAllProjects = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
 
-        const result = await ProjectServices.getAllProjects();
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 10;
+        const search = (req.query.search as string) || "";
+        const features = req.query.tags ? (req.query.tags as string).split(",") : []
+
+        const result = await ProjectServices.getAllProjects({ page, limit, search, features });
         sendResponse(res, {
             success: true,
             statusCode: httpStatus.OK,
