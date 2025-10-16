@@ -50,7 +50,7 @@ const getAllProjects = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
 
         const page = Number(req.query.page) || 1;
-        const limit = Number(req.query.limit) || 10;
+        const limit = Number(req.query.limit) || 4;
         const search = (req.query.search as string) || "";
         const features = req.query.tags ? (req.query.tags as string).split(",") : []
 

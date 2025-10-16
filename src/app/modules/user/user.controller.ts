@@ -48,7 +48,10 @@ const getUserById = catchAsync(
 //   async (req: Request, res: Response, next: NextFunction) => {
 
 //     const userId = Number(req.params.id)
-//     const payload = req.body
+//     const payload = {
+//       ...req.body,
+//       picture: req.file?.path
+//     }
 
 //     const result = await UserServices.updateUserById(userId, payload);
 //     sendResponse(res, {
