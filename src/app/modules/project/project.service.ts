@@ -75,6 +75,17 @@ const getAllProjects = async ({
     };
 };
 
+const getProjectById = async (projectId: number) => {
+    const result = await prisma.project.findUnique({
+        where: {
+            id: projectId
+        },
+        include: {
+            owner: true,
+        }
+    })
+    return result
+}
 
 const getProjectStats = async () => {
 
@@ -103,6 +114,7 @@ export const ProjectServices = {
     createProject,
     updateProject,
     getAllProjects,
+    getProjectById,
     getProjectStats,
     deleteProject
 }
